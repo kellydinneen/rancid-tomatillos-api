@@ -33,3 +33,24 @@ app.get('/api/v1/users/:id', (request, response) => {
 
   response.status(200).json(user);
 });
+
+app.use(express.json());
+
+app.post('/api/v1/users', (request, response) => {
+  const id = `u${Date.now()}`;
+  const user = request.body;
+
+    for (let requiredParameter of ['name', 'username', 'password']) {
+      if (!user[requiredParameter]) {
+        response
+          .status(422)
+          .send({ error: `Expected format: { name: <String>, username: <String>, password: <String> }. You're missing a "${requiredParameter}" property.` });
+      }
+    }
+
+  const { name, username, password } = user;
+  app.locals.users.push({ id, name, username, password });
+
+  response.status(201).json({ id, name, username, password });
+  console.log(users)
+});
