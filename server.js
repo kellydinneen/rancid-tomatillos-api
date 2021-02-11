@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+
+app.use(cors());
 
 app.locals.users = [
   { id: 'u1', name: 'Jessica Candel', username: 'Jessica', password: 'Candel' },
@@ -8,6 +11,7 @@ app.locals.users = [
 ];
 
 app.set('port', process.env.PORT || 3001);
+
 app.locals.title = 'Rancid Tomatillos API';
 
 app.get('/', (request, response) => {
@@ -52,5 +56,4 @@ app.post('/api/v1/users', (request, response) => {
   app.locals.users.push({ id, name, username, password });
 
   response.status(201).json({ id, name, username, password });
-  console.log(users)
 });
