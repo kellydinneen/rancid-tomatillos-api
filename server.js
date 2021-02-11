@@ -23,3 +23,13 @@ app.get('/api/v1/users', (request, response) => {
 
   response.json({ users });
 });
+
+app.get('/api/v1/users/:id', (request, response) => {
+  const { id } = request.params;
+  const user = app.locals.users.find(user => user.id === id);
+  if (!user) {
+    return response.sendStatus(404);
+  }
+
+  response.status(200).json(user);
+});
