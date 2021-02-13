@@ -5,9 +5,9 @@ const cors = require('cors');
 app.use(cors());
 
 app.locals.users = [
-  { id: 'u1', name: 'Jessica Candel', username: 'Jessica', password: 'Candel' },
-  { id: 'u2', name: 'Marcus Aurelius', username: 'Marcus', password: 'Aurelius' },
-  { id: 'u3', name: 'Thirdu Ser', username: 'Thirdu', password: 'Ser' }
+  { id: 'u1', name: 'Jessica Candel', username: 'Jessica', password: 'Candel', favorites:[] },
+  { id: 'u2', name: 'Marcus Aurelius', username: 'Marcus', password: 'Aurelius', favorites:[] },
+  { id: 'u3', name: 'Thirdu Ser', username: 'Thirdu', password: 'Ser', favorites:[] }
 ];
 
 app.set('port', process.env.PORT || 3001);
@@ -40,20 +40,14 @@ app.get('/api/v1/users/:id', (request, response) => {
 
 app.use(express.json());
 
-app.post('/api/v1/users', (request, response) => {
-  const id = `u${Date.now()}`;
-  const user = request.body;
-
-    for (let requiredParameter of ['name', 'username', 'password']) {
-      if (!user[requiredParameter]) {
-        response
-          .status(422)
-          .send({ error: `Expected format: { name: <String>, username: <String>, password: <String> }. You're missing a "${requiredParameter}" property.` });
-      }
-    }
-
-  const { name, username, password } = user;
-  app.locals.users.push({ id, name, username, password });
-
-  response.status(201).json({ id, name, username, password });
+app.post('/api/v1/users/:id', (request, response) => {
+  const { id } = request.params;
+  const newFavorite = request.body;
+  const user = app.locals.users.find(user => user.id === id);
+  if (!user) {
+    return response.sendStatus(404);
+  }
+  user.favorites.push(newFavorite)
+  response.status(201).json(user.favorites);
 });
+
