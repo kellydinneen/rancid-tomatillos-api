@@ -40,7 +40,7 @@ app.get('/api/v1/users/:id', (request, response) => {
 
 app.use(express.json());
 
-app.post('/api/v1/users/:id', (request, response) => {
+app.patch('/api/v1/users/:id', (request, response) => {
   const { id } = request.params;
   const newFavorite = request.body;
   const user = app.locals.users.find(user => user.id === id);
@@ -50,4 +50,5 @@ app.post('/api/v1/users/:id', (request, response) => {
   user.favorites.push(newFavorite)
   response.status(201).json(user.favorites);
 });
+
 
