@@ -40,7 +40,8 @@ app.get('/api/v1/users/:id', (request, response) => {
 
 app.use(express.json());
 
-app.post('/api/v1/users/:id', (request, response) => {
+
+app.patch('/api/v1/users/:id', (request, response) => {
   const { id } = request.params;
   const newFavorite = request.body;
   const user = app.locals.users.find(user => user.id === id);
@@ -50,4 +51,28 @@ app.post('/api/v1/users/:id', (request, response) => {
   user.favorites.push(newFavorite)
   response.status(201).json(user.favorites);
 });
+
+
+app.delete('/api/v1/users/:id', (request, response) => {
+  let { id } = req.params;
+  const favoriteToDelete = request.body;
+  
+  const user = app.locals.users.find(user => user.id === id);
+  if (!user) {
+    return response.sendStatus(404);
+  }
+  const originalFavoriteNumber = user.favorites.length;
+  
+  user.favorites = user.favorites.filter(movie => movie.id !== favoriteToDelete.id);
+  if (user.favorites.length = originalFavoriteNumber) {
+    return res.status(404).json({
+      message: `No found favorite with id of #${favoriteToDelete.id}.`
+    })
+  }
+
+  res.status(200).json({
+    message: `Favorite with title ${favoriteToDelete.title} has been deleted`
+  })
+})
+
 
