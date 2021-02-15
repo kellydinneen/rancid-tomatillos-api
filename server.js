@@ -48,7 +48,11 @@ app.patch('/api/v1/users/:id', (request, response) => {
   if (!user) {
     return response.sendStatus(404);
   }
-  user.favorites.push(newFavorite)
+  if(!user.favorites.some(fav => fav.id === newFavorite.id){
+   user.favorites.push(newFavorite)
+  } else {
+    user.favorites = user.favorites.filter(fav => fav.id !== newFavorite.id)
+  }
   response.status(201).json(user.favorites);
 });
 
