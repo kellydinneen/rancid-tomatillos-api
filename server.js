@@ -58,24 +58,24 @@ app.patch('/api/v1/users/:id', (request, response) => {
 });
 
 
-app.delete('/api/v1/users/:id', (request, response) => {
-  let { id } = request.params;
-  const favoriteToDelete = request.body;
-
-  const user = app.locals.users.find(user => user.id === id);
-  if (!user) {
-    return response.sendStatus(404);
-  }
-  const originalFavoriteNumber = user.favorites.length;
-
-  user.favorites = user.favorites.filter(movie => movie.id !== favoriteToDelete.id);
-  if (user.favorites.length = originalFavoriteNumber) {
-    return response.status(404).json({
-      message: `No found favorite with id of #${favoriteToDelete.id}.`
-    })
-  }
-
-  response.status(200).json({
-    message: `Favorite with title ${favoriteToDelete.title} has been deleted`
-  })
-})
+// app.delete('/api/v1/users/:id', (request, response) => {
+//   let { id } = request.params;
+//   const favoriteToDelete = request.body;
+//
+//   const user = app.locals.users.find(user => user.id === id);
+//   if (!user) {
+//     return response.sendStatus(404);
+//   }
+//   const originalFavoriteNumber = user.favorites.length;
+//
+//   user.favorites = user.favorites.filter(movie => movie.id !== favoriteToDelete.id);
+//   if (user.favorites.length = originalFavoriteNumber) {
+//     return response.status(404).json({
+//       message: `No found favorite with id of #${favoriteToDelete.id}.`
+//     })
+//   }
+//
+//   response.status(200).json({
+//     message: `Favorite with title ${favoriteToDelete.title} has been deleted`
+//   })
+// })
