@@ -48,7 +48,12 @@ app.patch('/api/v1/users/:id', (request, response) => {
   if (!user) {
     return response.sendStatus(404);
   }
-  user.favorites.push(newFavorite)
+  
+  if(!user.favorites.some(fav => fav.id === newFavorite.id)) {
+    user.favorites.push(newFavorite)
+  } else {
+    user.favorites = user.favorites.filter(movie => movie.id !== newFavorite.id);
+  }
   response.status(201).json(user.favorites);
 });
 
@@ -56,13 +61,13 @@ app.patch('/api/v1/users/:id', (request, response) => {
 app.delete('/api/v1/users/:id', (request, response) => {
   let { id } = req.params;
   const favoriteToDelete = request.body;
-  
+
   const user = app.locals.users.find(user => user.id === id);
   if (!user) {
     return response.sendStatus(404);
   }
   const originalFavoriteNumber = user.favorites.length;
-  
+
   user.favorites = user.favorites.filter(movie => movie.id !== favoriteToDelete.id);
   if (user.favorites.length = originalFavoriteNumber) {
     return res.status(404).json({
@@ -74,5 +79,3 @@ app.delete('/api/v1/users/:id', (request, response) => {
     message: `Favorite with title ${favoriteToDelete.title} has been deleted`
   })
 })
-
-
